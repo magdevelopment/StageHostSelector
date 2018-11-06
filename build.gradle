@@ -19,6 +19,9 @@ buildscript {
         // Kotlin
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:" + versions.kotlin
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:" + versions.kotlin
+
+        // Publish
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:' + versions.jitpackPlugin
     }
 }
 
