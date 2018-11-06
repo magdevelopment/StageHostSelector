@@ -1,9 +1,14 @@
 # StageHostSelector
+[![](https://jitpack.io/v/magdevelopment/StageHostSelector.svg)](https://jitpack.io/#magdevelopment/StageHostSelector)
 
 Tool for using custom stage host in projects with **Retrofit & OkHttp**
 
 ## How to include
-*In progress*
+```gradle
+dependencies {
+    implementation 'com.github.magdevelopment:StageHostSelector:0.1'
+}
+```
 
 ## How to use
 1. Somewhere on login screen create, init and add view:
