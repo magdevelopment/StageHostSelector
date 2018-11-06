@@ -1,4 +1,4 @@
-package com.magdv.dev.stagehostselector.dialog
+package com.magdv.stagehostselector.dialog
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -14,17 +14,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import com.magdv.dev.stagehostselector.Constants
-import com.magdv.dev.stagehostselector.R
+import com.magdv.stagehostselector.Constants
+import com.magdv.stagehostselector.R
 import kotlinx.android.synthetic.main.shs_dialog_stage_host_selector.*
 
-internal class StageHostSelectorFragment : BottomSheetDialogFragment() {
+internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
 
     private val preferences: SharedPreferences by lazy {
         PreferenceManager.getDefaultSharedPreferences(context)
     }
 
-    private lateinit var suggestionHostUrls: MutableSet<String>
+    private var suggestionHostUrls: MutableSet<String> = mutableSetOf()
     private var hostUrls: List<String> = emptyList()
     private var currentHostUrl: String? = null
 
@@ -40,6 +40,7 @@ internal class StageHostSelectorFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         loadSuggestions()
+        showSuggestions()
     }
 
     private fun initViews() {
@@ -111,8 +112,6 @@ internal class StageHostSelectorFragment : BottomSheetDialogFragment() {
 
         currentHostUrl = preferences
             .getString(Constants.HOST_URL_STORAGE_KEY, null)
-
-        showSuggestions()
     }
 
     private fun showSuggestions() {
@@ -156,7 +155,7 @@ internal class StageHostSelectorFragment : BottomSheetDialogFragment() {
 
     companion object {
         fun newInstance(): DialogFragment {
-            return StageHostSelectorFragment()
+            return StageHostSelectorDialogFragment()
         }
     }
 }

@@ -1,1 +1,1 @@
-include ':stagehostselector'
+include ':stagehostselector', ':sampleapp'

@@ -1,6 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+
     repositories {
         google()
         jcenter()
@@ -13,11 +14,11 @@ buildscript {
 
     dependencies {
         // Build
-        classpath "com.android.tools.build:gradle:$androidBuildPluginVersion"
+        classpath "com.android.tools.build:gradle:" + versions.androidBuildPlugin
 
         // Kotlin
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlinVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:" + versions.kotlin
+        classpath "org.jetbrains.kotlin:kotlin-android-extensions:" + versions.kotlin
     }
 }
 

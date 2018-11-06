@@ -1,8 +1,8 @@
-package com.magdv.dev.stagehostselector.interceptor
+package com.magdv.stagehostselector.interceptor
 
 import android.content.Context
 import android.preference.PreferenceManager
-import com.magdv.dev.stagehostselector.Constants
+import com.magdv.stagehostselector.Constants
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Response

@@ -6,7 +6,7 @@
  * Author: Dmitriy Orteney <d.orteney at magdv.com>
  */
 
-package com.magdv.dev.stagehostselector
+package com.magdv.stagehostselector
 
 internal object Constants {
     const val HOST_URL_STORAGE_KEY = "shs_host_url_key"

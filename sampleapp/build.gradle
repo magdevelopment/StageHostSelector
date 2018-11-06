@@ -1,4 +1,4 @@
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
@@ -6,10 +6,13 @@ android {
     compileSdkVersion versions.compileSdk
 
     defaultConfig {
+        applicationId "com.magdv.stagehostselector.sampleapp"
         minSdkVersion versions.minSdk
         targetSdkVersion versions.compileSdk
         versionCode versions.publishVersionCode
         versionName versions.publishVersion
+
+        buildConfigField "String", "API_ENDPOINT", '"http://example.com/"'
     }
 
     buildTypes {
@@ -20,12 +23,9 @@ android {
     }
 }
 
-androidExtensions {
-    experimental = true
-}
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':stagehostselector')
 
     implementation "com.android.support:appcompat-v7:" + versions.support
     implementation "com.android.support:design:" + versions.support
