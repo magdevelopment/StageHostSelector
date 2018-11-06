@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.github.dcendents.android-maven'
 
 android {
     compileSdkVersion versions.compileSdk
@@ -23,6 +24,8 @@ android {
 androidExtensions {
     experimental = true
 }
+
+group='com.github.magdevelopment'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
