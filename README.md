@@ -10,7 +10,7 @@ Tool for using custom stage host in projects with **Retrofit & OkHttp**
 ```kotlin
 if (BuildConfig.USES_DEV_FEATURES) {
     val urlView = StageHostSelectorView(requireContext())
-    urlView.init(BuildConfig.API_ENDPOINT, childFragmentManager)
+    urlView.init(BuildConfig.API_ENDPOINT, supportFragmentManager)
     appBarLayout.addView(urlView)
 }
 ```
