@@ -19,7 +19,9 @@ if (BuildConfig.USES_DEV_FEATURES) {
 ```kotlin
 val clientBuilder = OkHttpClient.Builder()
 ...
-clientBuilder.addInterceptor(StageHostSelectorInterceptor(context))
+if (BuildConfig.USES_DEV_FEATURES) {
+    clientBuilder.addInterceptor(StageHostSelectorInterceptor(context))
+}
 ...
 clientBuilder.build()
 ```
