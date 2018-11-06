@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="shs_new_url_hint">Введите новый URL</string>
+    <string name="shs_error_empty_url_input">Поле не может быть пустым</string>
+</resources>
