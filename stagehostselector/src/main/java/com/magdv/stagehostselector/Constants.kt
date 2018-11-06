@@ -1,11 +1,3 @@
-/*
- * Copyright © 2018 MAG Development, LLC. All rights reserved.
- * Project: MAG.Delivery
- * Date: 01.11.2018
- * Time: 15:26
- * Author: Dmitriy Orteney <d.orteney at magdv.com>
- */
-
 package com.magdv.stagehostselector
 
 internal object Constants {
