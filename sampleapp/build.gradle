@@ -27,11 +27,20 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':stagehostselector')
 
-    implementation "com.android.support:appcompat-v7:" + versions.support
-    implementation "com.android.support:design:" + versions.support
+    implementation 'com.android.support:appcompat-v7:' + versions.support
+    implementation 'com.android.support:recyclerview-v7:' + versions.support
+    implementation 'com.android.support:design:' + versions.support
 
-    implementation "com.android.support.constraint:constraint-layout:" + versions.constraintLayout
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:" + versions.kotlin
+    implementation 'com.android.support.constraint:constraint-layout:' + versions.constraintLayout
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + versions.kotlin
 
-    implementation "com.squareup.okhttp3:okhttp:" + versions.okhttp
+    implementation 'io.reactivex.rxjava2:rxjava:' + versions.rxJava
+    implementation 'io.reactivex.rxjava2:rxkotlin:' + versions.rxKotlin
+    implementation 'io.reactivex.rxjava2:rxandroid:' + versions.rxAndroid
+
+    implementation 'com.squareup.okhttp3:okhttp:' + versions.okhttp
+    implementation 'com.squareup.retrofit2:retrofit:' + versions.retrofit
+    implementation 'com.squareup.retrofit2:converter-gson:' + versions.retrofit
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:' + versions.retrofit
+
 }

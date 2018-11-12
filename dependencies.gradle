@@ -18,6 +18,12 @@ ext.versions = [
         support           : '28.0.0',
         constraintLayout  : '1.1.3',
 
+        // ReactiveX
+        rxJava            : '2.2.3',
+        rxKotlin          : '2.3.0',
+        rxAndroid         : '2.1.0',
+
         // Network
-        okhttp            : '3.11.0'
+        okhttp            : '3.11.0',
+        retrofit          : '2.4.0'
 ]
