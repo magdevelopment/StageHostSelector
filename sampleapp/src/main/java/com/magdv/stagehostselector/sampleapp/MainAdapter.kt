@@ -5,12 +5,15 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.magdv.stagehostselector.sampleapp.network.HttpLog
 import kotlinx.android.synthetic.main.item_http_log.view.*
+import java.text.SimpleDateFormat
+import java.util.Locale
 
-class MainAdapter : ListAdapter<String, MainAdapter.ViewHolder>(MainItemDiffCallback()) {
+class MainAdapter : ListAdapter<HttpLog, MainAdapter.ViewHolder>(MainItemDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_http_log, null)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_http_log, parent, false)
         return ViewHolder(view)
     }
 
@@ -20,8 +23,9 @@ class MainAdapter : ListAdapter<String, MainAdapter.ViewHolder>(MainItemDiffCall
 
     class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bind(httpLog: String) {
-            view.textView.text = httpLog
+        fun bind(httpLog: HttpLog) {
+            view.urlTextView.text = httpLog.url
+            view.timeTextView.text = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(httpLog.time)
         }
     }
 }

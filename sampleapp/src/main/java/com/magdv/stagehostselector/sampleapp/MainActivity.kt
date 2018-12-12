@@ -2,7 +2,9 @@ package com.magdv.stagehostselector.sampleapp
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import com.magdv.stagehostselector.sampleapp.network.HttpLog
 import com.magdv.stagehostselector.sampleapp.network.LoggingInterceptor
 import com.magdv.stagehostselector.sampleapp.network.NetworkFactory
 import com.magdv.stagehostselector.sampleapp.network.UserApi
@@ -13,15 +15,15 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private var logs = mutableListOf<String>()
+    private var logs = mutableListOf<HttpLog>()
 
     private lateinit var adapter: MainAdapter
     private val subscriptions = CompositeDisposable()
     private val loggingInterceptor = LoggingInterceptor()
 
-    private val logCallback: ((String) -> Unit) = { log ->
+    private val logCallback: ((HttpLog) -> Unit) = { log ->
         logs = ArrayList(logs)
-        logs.add(log)
+        logs.add(0, log)
         adapter.submitList(logs)
     }
 
@@ -46,8 +48,15 @@ class MainActivity : AppCompatActivity() {
         adapter = MainAdapter()
 
         recyclerView.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            val linearLayoutManager = LinearLayoutManager(context)
+            linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+            linearLayoutManager.reverseLayout = false
+            linearLayoutManager.stackFromEnd = false
+
+            layoutManager = linearLayoutManager
             adapter = this@MainActivity.adapter
+
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
     }
 
