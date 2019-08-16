@@ -1,7 +1,6 @@
 package com.magdv.stagehostselector.sampleapp.network
 
-import okhttp3.Interceptor
-import okhttp3.Response
+import okhttp3.*
 import java.util.Date
 
 class LoggingInterceptor : Interceptor {
@@ -17,6 +16,16 @@ class LoggingInterceptor : Interceptor {
         )
         callback?.invoke(httpLog)
 
-        return chain.proceed(request)
+        return request.createSuccessResponse()
+    }
+
+    private fun Request.createSuccessResponse(): Response {
+        return Response.Builder()
+            .request(this)
+            .protocol(Protocol.HTTP_1_1)
+            .message("")
+            .body(ResponseBody.create(MediaType.get("application/json"), ""))
+            .code(200)
+            .build()
     }
 }

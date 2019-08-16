@@ -27,11 +27,11 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':stagehostselector')
 
-    implementation 'com.android.support:appcompat-v7:' + versions.support
-    implementation 'com.android.support:recyclerview-v7:' + versions.support
-    implementation 'com.android.support:design:' + versions.support
+    implementation 'androidx.appcompat:appcompat:' + versions.androidXAppCompat
+    implementation 'androidx.constraintlayout:constraintlayout:' + versions.androidXconstraintLayout
 
-    implementation 'com.android.support.constraint:constraint-layout:' + versions.constraintLayout
+    implementation 'com.google.android.material:material:' + versions.materialComponents
+
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + versions.kotlin
 
     implementation 'io.reactivex.rxjava2:rxjava:' + versions.rxJava

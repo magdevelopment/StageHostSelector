@@ -1,6 +1,6 @@
 package com.magdv.stagehostselector.sampleapp
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 import com.magdv.stagehostselector.sampleapp.network.HttpLog
 
 class MainItemDiffCallback : DiffUtil.ItemCallback<HttpLog>() {

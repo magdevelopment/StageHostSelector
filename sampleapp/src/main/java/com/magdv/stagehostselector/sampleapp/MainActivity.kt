@@ -1,9 +1,9 @@
 package com.magdv.stagehostselector.sampleapp
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.magdv.stagehostselector.sampleapp.network.HttpLog
 import com.magdv.stagehostselector.sampleapp.network.LoggingInterceptor
 import com.magdv.stagehostselector.sampleapp.network.NetworkFactory
@@ -56,7 +56,12 @@ class MainActivity : AppCompatActivity() {
             layoutManager = linearLayoutManager
             adapter = this@MainActivity.adapter
 
-            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            addItemDecoration(
+                DividerItemDecoration(
+                    context,
+                    DividerItemDecoration.VERTICAL
+                )
+            )
         }
     }
 
