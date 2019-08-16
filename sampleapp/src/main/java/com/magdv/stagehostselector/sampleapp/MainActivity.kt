@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.magdv.stagehostselector.sampleapp.network.HttpLog
 import com.magdv.stagehostselector.sampleapp.network.LoggingInterceptor
 import com.magdv.stagehostselector.sampleapp.network.NetworkFactory
@@ -49,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
         recyclerView.apply {
             val linearLayoutManager = LinearLayoutManager(context)
-            linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+            linearLayoutManager.orientation = RecyclerView.VERTICAL
             linearLayoutManager.reverseLayout = false
             linearLayoutManager.stackFromEnd = false
 
