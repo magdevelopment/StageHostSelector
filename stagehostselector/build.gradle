@@ -9,32 +9,32 @@ android {
     defaultConfig {
         minSdkVersion versions.minSdk
         targetSdkVersion versions.compileSdk
-        versionCode versions.publishVersionCode
-        versionName versions.publishVersion
+        versionCode 2
+        versionName '1.0'
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-}
 
-androidExtensions {
-    experimental = true
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
 }
 
 group='com.github.magdevelopment'
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:' + versions.androidXAppCompat
+    implementation 'androidx.constraintlayout:constraintlayout:' + versions.androidXconstraintLayout
 
-    implementation "com.android.support:appcompat-v7:" + versions.support
-    implementation "com.android.support:design:" + versions.support
+    implementation 'com.google.android.material:material:' + versions.materialComponents
 
-    implementation "com.android.support.constraint:constraint-layout:" + versions.constraintLayout
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:" + versions.kotlin
 
-    implementation "com.squareup.okhttp3:okhttp:" + versions.okhttp
+    api "com.squareup.okhttp3:okhttp:" + versions.okhttp
 }

@@ -4,13 +4,13 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.preference.PreferenceManager
-import android.support.v4.app.FragmentActivity
-import android.support.v4.app.FragmentManager
-import android.support.v4.graphics.ColorUtils
-import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.graphics.ColorUtils
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import com.magdv.stagehostselector.Constants
 import com.magdv.stagehostselector.dialog.StageHostSelectorDialogFragment
 
@@ -50,7 +50,7 @@ class StageHostSelectorView @JvmOverloads constructor(
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         setOnClickListener {
-            val dialog = StageHostSelectorDialogFragment.newInstance()
+            val dialog = StageHostSelectorDialogFragment()
             dialog.show(fragmentManager, Constants.STAGE_HOST_SELECTOR_DIALOG_TAG)
         }
     }

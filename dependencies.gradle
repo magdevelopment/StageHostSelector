@@ -2,22 +2,29 @@ ext.versions = [
         // Build Configs
         minSdk            : 18,
         compileSdk        : 28,
-        publishVersion    : '0.1',
-        publishVersionCode: 1,
 
         // Build Plugins
-        androidBuildPlugin: '3.2.1',
+        androidBuildPlugin: '3.4.2',
 
         // Publish Plugins
         jitpackPlugin     : '2.1',
 
         // Language
-        kotlin            : '1.3.0',
+        kotlin            : '1.3.41',
 
-        // Android Support
-        support           : '28.0.0',
-        constraintLayout  : '1.1.3',
+        // Android X
+        androidXAppCompat : '1.0.2',
+        androidXconstraintLayout: '1.1.3',
+
+        // Desing
+        materialComponents : '1.0.0',
+
+        // ReactiveX
+        rxJava            : '2.2.3',
+        rxKotlin          : '2.3.0',
+        rxAndroid         : '2.1.0',
 
         // Network
-        okhttp            : '3.11.0'
+        okhttp            : '3.11.0',
+        retrofit          : '2.4.0'
 ]

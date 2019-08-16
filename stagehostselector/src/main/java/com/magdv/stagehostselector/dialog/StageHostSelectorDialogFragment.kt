@@ -3,10 +3,6 @@ package com.magdv.stagehostselector.dialog
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.design.chip.Chip
-import android.support.design.widget.BottomSheetDialogFragment
-import android.support.v4.app.DialogFragment
-import android.support.v4.widget.TextViewCompat
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -14,6 +10,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.core.widget.TextViewCompat
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.chip.Chip
 import com.magdv.stagehostselector.Constants
 import com.magdv.stagehostselector.R
 import kotlinx.android.synthetic.main.shs_dialog_stage_host_selector.*
@@ -151,11 +150,5 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
         suggestionHostUrls.remove(urlToRemove)
         saveSuggestions()
         showSuggestions()
-    }
-
-    companion object {
-        fun newInstance(): DialogFragment {
-            return StageHostSelectorDialogFragment()
-        }
     }
 }
