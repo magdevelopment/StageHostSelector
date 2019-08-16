@@ -6,7 +6,7 @@ Tool for using custom stage host in projects with **Retrofit & OkHttp**
 ## How to include
 ```gradle
 dependencies {
-    implementation 'com.github.magdevelopment:StageHostSelector:0.1'
+    implementation 'com.github.magdevelopment:StageHostSelector:{latest_version}'
 }
 ```
 
