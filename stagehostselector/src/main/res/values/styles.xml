@@ -5,7 +5,7 @@
         <item name="android:background">@drawable/shs_bg_bottom_sheet_dialog_fragment</item>
     </style>
 
-    <style name="SHS_BaseBottomSheetDialogTheme" parent="@style/Theme.Design.Light.BottomSheetDialog">
+    <style name="SHS_BaseBottomSheetDialogTheme" parent="@style/Theme.MaterialComponents.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
         <item name="bottomSheetStyle">@style/SHS_BottomSheet</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
