@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion versions.minSdk
         targetSdkVersion versions.compileSdk
-        versionCode versions.publishVersionCode
-        versionName versions.publishVersion
+        versionCode 2
+        versionName '1.0'
     }
 
     buildTypes {
@@ -29,8 +29,6 @@ android {
 group='com.github.magdevelopment'
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     implementation 'androidx.appcompat:appcompat:' + versions.androidXAppCompat
     implementation 'androidx.constraintlayout:constraintlayout:' + versions.androidXconstraintLayout
 

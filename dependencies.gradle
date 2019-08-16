@@ -2,8 +2,6 @@ ext.versions = [
         // Build Configs
         minSdk            : 18,
         compileSdk        : 28,
-        publishVersion    : '0.1',
-        publishVersionCode: 1,
 
         // Build Plugins
         androidBuildPlugin: '3.4.2',
