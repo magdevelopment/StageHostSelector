@@ -2,4 +2,5 @@
 <resources>
     <string name="shs_new_url_hint">Введите новый URL</string>
     <string name="shs_error_empty_url_input">Поле не может быть пустым</string>
+    <string name="shs_copied_to_clipboard">Адрес успешно скопирован!</string>
 </resources>

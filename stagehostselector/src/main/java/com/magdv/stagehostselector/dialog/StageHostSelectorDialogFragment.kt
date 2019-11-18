@@ -1,5 +1,8 @@
 package com.magdv.stagehostselector.dialog
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -10,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.core.widget.TextViewCompat
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
@@ -136,6 +140,10 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
                 ellipsize = TextUtils.TruncateAt.MIDDLE
 
                 setOnCloseIconClickListener { onRemoveHostUrl(it.id) }
+                setOnLongClickListener {
+                    onLongClick(url)
+                    true
+                }
             }
             .also { chipGroup.addView(it) }
     }
@@ -143,12 +151,21 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
     private fun onRemoveHostUrl(id: Int) {
         val urlToRemove = hostUrls[id]
 
-        if(urlToRemove == currentHostUrl) {
+        if (urlToRemove == currentHostUrl) {
             onHostUrlSelected(null)
         }
 
         suggestionHostUrls.remove(urlToRemove)
         saveSuggestions()
         showSuggestions()
+    }
+
+    private fun onLongClick(url: String) {
+        val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("Url", url)
+        clipboard.primaryClip = clip
+
+        Toast.makeText(requireContext(), R.string.shs_copied_to_clipboard, Toast.LENGTH_SHORT)
+            .show()
     }
 }
