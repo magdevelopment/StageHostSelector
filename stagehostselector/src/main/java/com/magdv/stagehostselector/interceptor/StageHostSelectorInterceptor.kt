@@ -6,7 +6,6 @@ import com.magdv.stagehostselector.Constants
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Response
-import kotlin.math.max
 
 class StageHostSelectorInterceptor(
     context: Context,
@@ -16,7 +15,7 @@ class StageHostSelectorInterceptor(
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     private var cachedHostUrl: String? = null
     private var cachedHostHttpUrl: HttpUrl? = null
-    private val defaultHostUrlSegments = HttpUrl.parse(defaultHostUrl)?.pathSegments()
+    private val defaultHostUrlSegments = HttpUrl.parse(defaultHostUrl)?.pathSegments() ?: mutableListOf()
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val hostUrl = sharedPreferences.getString(Constants.HOST_URL_STORAGE_KEY, null)
@@ -28,15 +27,24 @@ class StageHostSelectorInterceptor(
         }
 
         val newRequest = cachedHostHttpUrl?.let { cachedHostHttpUrl ->
-            var defaultHostUrlSegmentsCount = defaultHostUrlSegments?.count() ?: 0
-            if (defaultHostUrlSegmentsCount == 1 && defaultHostUrlSegments?.get(0) == "") {
+            var defaultHostUrlSegmentsCount = defaultHostUrlSegments.count()
+            if (defaultHostUrlSegments[defaultHostUrlSegmentsCount - 1] == "") {
                 defaultHostUrlSegmentsCount -= 1
             }
-            val chainRequestUrlSegmentCount = chain.request().url().pathSegments().count()
+            val chainRequestPathSegments = chain.request().url().pathSegments()
+
+            var isPassedDefaultSegmentPath = false
+            for (i in 0 until defaultHostUrlSegmentsCount) {
+                if (defaultHostUrlSegments[i] != chainRequestPathSegments[i]) {
+                    isPassedDefaultSegmentPath = true
+                    break
+                }
+            }
 
             var pathSegments = ""
-            val chainRequestPathSegments = chain.request().url().pathSegments()
-            for (i in defaultHostUrlSegmentsCount until chainRequestUrlSegmentCount) {
+            val chainRequestUrlSegmentCount = chainRequestPathSegments.count()
+            val startSegment = if (isPassedDefaultSegmentPath) 0 else defaultHostUrlSegmentsCount
+            for (i in startSegment until chainRequestUrlSegmentCount) {
                 pathSegments += "${chainRequestPathSegments[i]}/"
             }
 
