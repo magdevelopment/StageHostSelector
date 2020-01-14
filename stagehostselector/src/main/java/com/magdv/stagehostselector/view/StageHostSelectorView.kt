@@ -26,6 +26,8 @@ class StageHostSelectorView @JvmOverloads constructor(
             updateText()
         }
 
+    var suggestedUrls: MutableSet<String> = mutableSetOf()
+
     private val fragmentManager: FragmentManager?
         get() = (context as? FragmentActivity)?.supportFragmentManager
 
@@ -50,7 +52,7 @@ class StageHostSelectorView @JvmOverloads constructor(
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         setOnClickListener {
-            val dialog = StageHostSelectorDialogFragment()
+            val dialog = StageHostSelectorDialogFragment.newInstance(suggestedUrls)
             dialog.show(fragmentManager, Constants.STAGE_HOST_SELECTOR_DIALOG_TAG)
         }
     }

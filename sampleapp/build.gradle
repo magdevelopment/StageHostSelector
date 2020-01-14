@@ -12,7 +12,7 @@ android {
         versionCode versions.publishVersionCode
         versionName versions.publishVersion
 
-        buildConfigField "String", "API_ENDPOINT", '"http://example.com/"'
+        buildConfigField "String", "API_ENDPOINT", '"http://example.com/main/"'
     }
 
     buildTypes {

@@ -12,7 +12,7 @@ object NetworkFactory {
 
     fun createHttpClient(context: Context, loggingInterceptor: LoggingInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(StageHostSelectorInterceptor(context))
+            .addInterceptor(StageHostSelectorInterceptor(context, BuildConfig.API_ENDPOINT))
             .addInterceptor(loggingInterceptor)
             .build()
     }

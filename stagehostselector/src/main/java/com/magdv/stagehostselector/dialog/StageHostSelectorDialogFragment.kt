@@ -83,14 +83,6 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun onHostUrlSelected(url: String?) {
-        currentHostUrl = url
-
-        preferences.edit()
-            .putString(Constants.HOST_URL_STORAGE_KEY, url)
-            .apply()
-    }
-
     private fun validateUrl(url: String): Boolean {
         return when {
             url.isBlank() -> {
@@ -102,19 +94,47 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
         }
     }
 
+    private fun loadSuggestions() {
+        suggestionHostUrls = preferences
+                                 .getStringSet(Constants.HOST_URL_SUGGESTIONS_STORAGE_KEY, null)
+                                 ?.toMutableSet() ?: mutableSetOf()
+
+        addDefaultSuggestionUrls()
+
+        currentHostUrl = preferences
+            .getString(Constants.HOST_URL_STORAGE_KEY, null)
+    }
+
+    private fun addDefaultSuggestionUrls() {
+        urls?.forEach {
+            suggestionHostUrls.add(it)
+        }
+    }
+
+    private fun onRemoveHostUrl(id: Int) {
+        val urlToRemove = hostUrls[id]
+
+        if (urlToRemove == currentHostUrl) {
+            onHostUrlSelected(null)
+        }
+
+        suggestionHostUrls.remove(urlToRemove)
+        saveSuggestions()
+        showSuggestions()
+    }
+
+    private fun onHostUrlSelected(url: String?) {
+        currentHostUrl = url
+
+        preferences.edit()
+            .putString(Constants.HOST_URL_STORAGE_KEY, url)
+            .apply()
+    }
+
     private fun saveSuggestions() {
         preferences.edit()
             .putStringSet(Constants.HOST_URL_SUGGESTIONS_STORAGE_KEY, suggestionHostUrls)
             .apply()
-    }
-
-    private fun loadSuggestions() {
-        suggestionHostUrls = preferences
-            .getStringSet(Constants.HOST_URL_SUGGESTIONS_STORAGE_KEY, null)
-            ?.toMutableSet() ?: mutableSetOf()
-
-        currentHostUrl = preferences
-            .getString(Constants.HOST_URL_STORAGE_KEY, null)
     }
 
     private fun showSuggestions() {
@@ -148,18 +168,6 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
             .also { chipGroup.addView(it) }
     }
 
-    private fun onRemoveHostUrl(id: Int) {
-        val urlToRemove = hostUrls[id]
-
-        if (urlToRemove == currentHostUrl) {
-            onHostUrlSelected(null)
-        }
-
-        suggestionHostUrls.remove(urlToRemove)
-        saveSuggestions()
-        showSuggestions()
-    }
-
     private fun onLongClick(url: String) {
         val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("Url", url)
@@ -167,5 +175,14 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
 
         Toast.makeText(requireContext(), R.string.shs_copied_to_clipboard, Toast.LENGTH_SHORT)
             .show()
+    }
+
+    companion object {
+        private var urls: MutableSet<String>? = null
+
+        fun newInstance(suggestedUrls: MutableSet<String>? = null): BottomSheetDialogFragment {
+            urls = suggestedUrls
+            return StageHostSelectorDialogFragment()
+        }
     }
 }
