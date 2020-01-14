@@ -52,7 +52,8 @@ class StageHostSelectorView @JvmOverloads constructor(
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         setOnClickListener {
-            val dialog = StageHostSelectorDialogFragment.newInstance(suggestedUrls)
+            val dialog = StageHostSelectorDialogFragment()
+            dialog.saveDefaultSuggestionUrls(suggestedUrls)
             dialog.show(fragmentManager, Constants.STAGE_HOST_SELECTOR_DIALOG_TAG)
         }
     }

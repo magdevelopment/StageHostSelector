@@ -30,6 +30,7 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
     private var suggestionHostUrls: MutableSet<String> = mutableSetOf()
     private var hostUrls: List<String> = emptyList()
     private var currentHostUrl: String? = null
+    private var urls: Set<String>? = null
 
     override fun getTheme(): Int {
         return R.style.SHS_BottomSheetDialogTheme
@@ -106,8 +107,12 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun addDefaultSuggestionUrls() {
-        urls?.forEach {
-            suggestionHostUrls.add(it)
+        if (suggestionHostUrls.isEmpty()) {
+            urls?.forEach {
+                suggestionHostUrls.add(it)
+            }
+
+            saveSuggestions()
         }
     }
 
@@ -177,12 +182,7 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
             .show()
     }
 
-    companion object {
-        private var urls: MutableSet<String>? = null
-
-        fun newInstance(suggestedUrls: MutableSet<String>? = null): BottomSheetDialogFragment {
-            urls = suggestedUrls
-            return StageHostSelectorDialogFragment()
-        }
+    fun saveDefaultSuggestionUrls(suggestedUrls: Set<String>) {
+        this.urls = suggestedUrls
     }
 }

@@ -68,17 +68,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun initStageHostSelectorView() {
         val view = StageHostSelectorView(this)
-        val suggestedUrls = mutableSetOf(
-            "http://example.com",
-            "http://example.com/alternative/",
-            "http://172.21.19.165:3500/",
-            "http://example.com/alternative/first",
-            "http://example.com/alternative/second",
-            "http://example.com:8080/alternative/first",
-            "http://example.com:8080/alternative/second"
-        )
         view.defaultHostUrl = BuildConfig.API_ENDPOINT
-        view.suggestedUrls = suggestedUrls
+        view.suggestedUrls = mutableSetOf(
+            "http://example.com/alternative/",
+            "http://172.21.19.123:3500/",
+            "http://example.com/alternative/first",
+            "http://example.com:8080/alternative/first"
+        )
         appBarLayout.addView(view)
     }
 
