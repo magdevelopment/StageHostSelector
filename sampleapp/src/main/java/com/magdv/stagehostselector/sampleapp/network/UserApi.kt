@@ -7,4 +7,7 @@ interface UserApi {
 
     @GET("user/login")
     fun login(): Completable
+
+    @GET("/logout")
+    fun logout(): Completable
 }

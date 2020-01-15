@@ -13,6 +13,7 @@ import com.magdv.stagehostselector.view.StageHostSelectorView
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
@@ -73,19 +74,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFab() {
-        sendFab.setOnClickListener { requestLogin() }
+        sendFab.setOnClickListener { doRequest() }
     }
 
-    private fun requestLogin() {
-        subscriptions += userApi.login()
-            .subscribe(
-                {
-                    // Empty
-                },
-                { error ->
-                    // TODO
-                }
-            )
+    private fun doRequest() {
+        if (Random.nextBoolean()) {
+            subscriptions += userApi.login()
+                .subscribe(
+                    {
+                        // Empty
+                    },
+                    { error ->
+                        // TODO
+                    }
+                )
+        } else {
+            subscriptions += userApi.logout()
+                .subscribe(
+                    {
+                        // Empty
+                    },
+                    { error ->
+                        // TODO
+                    }
+                )
+        }
     }
 
     override fun onResume() {
