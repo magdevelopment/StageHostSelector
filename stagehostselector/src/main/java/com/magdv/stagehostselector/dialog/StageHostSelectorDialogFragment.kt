@@ -25,8 +25,8 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
     private var suggestionHostUrls: MutableSet<String> = mutableSetOf()
     private var hostUrls: List<String> = emptyList()
     private var currentHostUrl: String? = null
-    private val repository: StageHostSelectorRepository by lazy {
-        StageHostSelectorRepository.getInstance(PreferenceManager.getDefaultSharedPreferences(context))
+    private val repository: StageHostSelectorRepository? by lazy {
+        StageHostSelectorRepository.getInstance()
     }
 
     override fun getTheme(): Int {
@@ -93,8 +93,8 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun loadSuggestions() {
-        suggestionHostUrls = repository.getSuggestionHostUrls().toMutableSet()
-        currentHostUrl = repository.getCurrentHostUrl()
+        suggestionHostUrls = (repository?.getSuggestionHostUrls() ?: emptySet()).toMutableSet()
+        currentHostUrl = repository?.getCurrentHostUrl()
     }
 
     private fun onRemoveHostUrl(id: Int) {
@@ -112,11 +112,11 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
     private fun onHostUrlSelected(url: String?) {
         currentHostUrl = url
 
-        repository.setCurrentHostUrl(url)
+        repository?.setCurrentHostUrl(url)
     }
 
     private fun saveSuggestions() {
-        repository.setSuggestionHostUrls(suggestionHostUrls)
+        repository?.setSuggestionHostUrls(suggestionHostUrls)
     }
 
     private fun showSuggestions() {

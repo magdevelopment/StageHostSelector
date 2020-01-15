@@ -5,11 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.magdv.stagehostselector.StageHostSelector
 import com.magdv.stagehostselector.sampleapp.network.HttpLog
 import com.magdv.stagehostselector.sampleapp.network.LoggingInterceptor
 import com.magdv.stagehostselector.sampleapp.network.NetworkFactory
 import com.magdv.stagehostselector.sampleapp.network.UserApi
-import com.magdv.stagehostselector.view.StageHostSelectorView
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.activity_main.*
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val userApi: UserApi by lazy {
-        val client = NetworkFactory.createHttpClient(this, loggingInterceptor)
+        val client = NetworkFactory.createHttpClient(loggingInterceptor)
         return@lazy NetworkFactory.createUserApi(client)
     }
 
@@ -41,9 +41,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
+        initStageHostSelector()
         initList()
         initStageHostSelectorView()
         initFab()
+    }
+
+    private fun initStageHostSelector() {
+        StageHostSelector.init(
+            this,
+            BuildConfig.API_ENDPOINT,
+            setOf(
+                "http://example.com/alternative/",
+                "http://172.21.19.123:3500/",
+                "http://example.com/alternative/first",
+                "http://example.com:8080/alternative/first"
+            )
+        )
     }
 
     private fun initList() {
@@ -68,15 +82,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initStageHostSelectorView() {
-        val view = StageHostSelectorView(this)
-        view.defaultHostUrl = BuildConfig.API_ENDPOINT
-        view.suggestedUrls = mutableSetOf(
-            "http://example.com/alternative/",
-            "http://172.21.19.123:3500/",
-            "http://example.com/alternative/first",
-            "http://example.com:8080/alternative/first"
-        )
-        appBarLayout.addView(view)
+        appBarLayout.addView(StageHostSelector.createView(this))
     }
 
     private fun initFab() {

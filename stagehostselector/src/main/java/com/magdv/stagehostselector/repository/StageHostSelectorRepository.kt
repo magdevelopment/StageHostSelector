@@ -1,13 +1,19 @@
 package com.magdv.stagehostselector.repository
 
+import android.content.Context
 import android.content.SharedPreferences
+import android.preference.PreferenceManager
 import com.magdv.stagehostselector.Constants
 
 internal class StageHostSelectorRepository private constructor(
-    private val preferences: SharedPreferences
+    private val context: Context
 ) {
 
     private var urls: Set<String> = emptySet()
+    private var url: String? = null
+    private val preferences: SharedPreferences by lazy {
+        PreferenceManager.getDefaultSharedPreferences(context)
+    }
 
     fun getCurrentHostUrl(): String? {
         return preferences
@@ -38,18 +44,25 @@ internal class StageHostSelectorRepository private constructor(
         this.urls = suggestedUrls
     }
 
+    fun setDefaultHostUrl(hostUrl: String?) {
+        this.url = hostUrl
+    }
+
+    fun getDefaultHostUrl(): String? {
+        return this.url
+    }
+
     companion object {
 
         @Volatile private var instance: StageHostSelectorRepository? = null
 
-        fun getInstance(preferences: SharedPreferences): StageHostSelectorRepository {
-            return when {
-                instance != null -> instance!!
-                else -> synchronized(this) {
-                    if (instance == null) instance = StageHostSelectorRepository(preferences)
-                    instance!!
-                }
-            }
+        fun getInstance(): StageHostSelectorRepository? {
+            return instance
+        }
+
+        fun newInstance(context: Context): StageHostSelectorRepository {
+            instance = StageHostSelectorRepository(context)
+            return instance!!
         }
     }
 }

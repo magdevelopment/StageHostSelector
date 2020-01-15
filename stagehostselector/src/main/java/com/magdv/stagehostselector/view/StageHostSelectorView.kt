@@ -21,18 +21,9 @@ class StageHostSelectorView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : AppCompatTextView(context, attrs, defStyleAttr) {
 
-    var defaultHostUrl: String? = null
-        set(value) {
-            field = value
-            updateText()
-        }
-
-    var suggestedUrls: MutableSet<String> = mutableSetOf()
-        set(value) {
-            field = value
-
-            StageHostSelectorRepository.getInstance(sharedPreferences).addDefaultSuggestionUrls(suggestedUrls)
-        }
+    private val repository: StageHostSelectorRepository? by lazy {
+        StageHostSelectorRepository.getInstance()
+    }
 
     private val fragmentManager: FragmentManager?
         get() = (context as? FragmentActivity)?.supportFragmentManager
@@ -49,6 +40,7 @@ class StageHostSelectorView @JvmOverloads constructor(
         }
 
     init {
+        updateText()
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
         setTextColor(Color.WHITE)
         setBackgroundColor(ColorUtils.setAlphaComponent(Color.BLACK, 138))
@@ -64,7 +56,7 @@ class StageHostSelectorView @JvmOverloads constructor(
     }
 
     private fun updateText() {
-        text = sharedPreferences.getString(Constants.HOST_URL_STORAGE_KEY, defaultHostUrl)
+        text = repository?.getCurrentHostUrl() ?: repository?.getDefaultHostUrl()
     }
 
     override fun onAttachedToWindow() {
