@@ -9,12 +9,13 @@ import okhttp3.Response
 
 class StageHostSelectorInterceptor(
     context: Context,
-    private val defaultHostUrl: String
+    defaultHostUrl: String
 ) : Interceptor {
 
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     private var cachedHostUrl: String? = null
     private var cachedHostHttpUrl: HttpUrl? = null
+    private val defaultHostUrlSegments = HttpUrl.parse(defaultHostUrl)?.pathSegments() ?: mutableListOf()
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val hostUrl = sharedPreferences.getString(Constants.HOST_URL_STORAGE_KEY, null)
@@ -26,14 +27,25 @@ class StageHostSelectorInterceptor(
         }
 
         val newRequest = cachedHostHttpUrl?.let { cachedHostHttpUrl ->
+            var defaultHostUrlSegmentsCount = defaultHostUrlSegments.count()
+            if (defaultHostUrlSegments[defaultHostUrlSegmentsCount - 1] == "") {
+                defaultHostUrlSegmentsCount -= 1
+            }
+            val chainRequestPathSegments = chain.request().url().pathSegments()
 
-            val defaultHostUrlSegmentsCount = HttpUrl.parse(defaultHostUrl)?.pathSegments()?.count() ?: 0
-            val necessaryPartHostUrlSegmentsCount = if (defaultHostUrlSegmentsCount == 0) 0 else defaultHostUrlSegmentsCount - 1
-            val chainRequestUrlSegmentCount = chain.request().url().pathSegments().count()
+            var isPassedDefaultSegmentPath = false
+            for (i in 0 until defaultHostUrlSegmentsCount) {
+                if (defaultHostUrlSegments[i] != chainRequestPathSegments[i]) {
+                    isPassedDefaultSegmentPath = true
+                    break
+                }
+            }
 
             var pathSegments = ""
-            for (i in necessaryPartHostUrlSegmentsCount until chainRequestUrlSegmentCount) {
-                pathSegments += "${chain.request().url().pathSegments()[i]}/"
+            val chainRequestUrlSegmentCount = chainRequestPathSegments.count()
+            val startSegment = if (isPassedDefaultSegmentPath) 0 else defaultHostUrlSegmentsCount
+            for (i in startSegment until chainRequestUrlSegmentCount) {
+                pathSegments += "${chainRequestPathSegments[i]}/"
             }
 
             val newUrl = cachedHostHttpUrl.newBuilder()
