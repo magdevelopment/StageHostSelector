@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.magdv.stagehostselector.Constants
 import com.magdv.stagehostselector.dialog.StageHostSelectorDialogFragment
+import com.magdv.stagehostselector.repository.StageHostSelectorRepository
 
 class StageHostSelectorView @JvmOverloads constructor(
     context: Context,
@@ -24,6 +25,13 @@ class StageHostSelectorView @JvmOverloads constructor(
         set(value) {
             field = value
             updateText()
+        }
+
+    var suggestedUrls: MutableSet<String> = mutableSetOf()
+        set(value) {
+            field = value
+
+            StageHostSelectorRepository.getInstance(sharedPreferences).addDefaultSuggestionUrls(suggestedUrls)
         }
 
     private val fragmentManager: FragmentManager?

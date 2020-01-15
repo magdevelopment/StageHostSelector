@@ -3,7 +3,6 @@ package com.magdv.stagehostselector.dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.text.Editable
@@ -17,19 +16,18 @@ import android.widget.Toast
 import androidx.core.widget.TextViewCompat
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
-import com.magdv.stagehostselector.Constants
 import com.magdv.stagehostselector.R
+import com.magdv.stagehostselector.repository.StageHostSelectorRepository
 import kotlinx.android.synthetic.main.shs_dialog_stage_host_selector.*
 
 internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
 
-    private val preferences: SharedPreferences by lazy {
-        PreferenceManager.getDefaultSharedPreferences(context)
-    }
-
     private var suggestionHostUrls: MutableSet<String> = mutableSetOf()
     private var hostUrls: List<String> = emptyList()
     private var currentHostUrl: String? = null
+    private val repository: StageHostSelectorRepository by lazy {
+        StageHostSelectorRepository.getInstance(PreferenceManager.getDefaultSharedPreferences(context))
+    }
 
     override fun getTheme(): Int {
         return R.style.SHS_BottomSheetDialogTheme
@@ -83,14 +81,6 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun onHostUrlSelected(url: String?) {
-        currentHostUrl = url
-
-        preferences.edit()
-            .putString(Constants.HOST_URL_STORAGE_KEY, url)
-            .apply()
-    }
-
     private fun validateUrl(url: String): Boolean {
         return when {
             url.isBlank() -> {
@@ -102,19 +92,31 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun saveSuggestions() {
-        preferences.edit()
-            .putStringSet(Constants.HOST_URL_SUGGESTIONS_STORAGE_KEY, suggestionHostUrls)
-            .apply()
+    private fun loadSuggestions() {
+        suggestionHostUrls = repository.getSuggestionHostUrls().toMutableSet()
+        currentHostUrl = repository.getCurrentHostUrl()
     }
 
-    private fun loadSuggestions() {
-        suggestionHostUrls = preferences
-            .getStringSet(Constants.HOST_URL_SUGGESTIONS_STORAGE_KEY, null)
-            ?.toMutableSet() ?: mutableSetOf()
+    private fun onRemoveHostUrl(id: Int) {
+        val urlToRemove = hostUrls[id]
 
-        currentHostUrl = preferences
-            .getString(Constants.HOST_URL_STORAGE_KEY, null)
+        if (urlToRemove == currentHostUrl) {
+            onHostUrlSelected(null)
+        }
+
+        suggestionHostUrls.remove(urlToRemove)
+        saveSuggestions()
+        showSuggestions()
+    }
+
+    private fun onHostUrlSelected(url: String?) {
+        currentHostUrl = url
+
+        repository.setCurrentHostUrl(url)
+    }
+
+    private fun saveSuggestions() {
+        repository.setSuggestionHostUrls(suggestionHostUrls)
     }
 
     private fun showSuggestions() {
@@ -146,18 +148,6 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
                 }
             }
             .also { chipGroup.addView(it) }
-    }
-
-    private fun onRemoveHostUrl(id: Int) {
-        val urlToRemove = hostUrls[id]
-
-        if (urlToRemove == currentHostUrl) {
-            onHostUrlSelected(null)
-        }
-
-        suggestionHostUrls.remove(urlToRemove)
-        saveSuggestions()
-        showSuggestions()
     }
 
     private fun onLongClick(url: String) {
