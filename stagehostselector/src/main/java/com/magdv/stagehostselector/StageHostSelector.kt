@@ -20,13 +20,11 @@ object StageHostSelector {
         repository = StageHostSelectorRepositoryImpl.newInstance(preferences, defaultHostUrl, suggestedUrls)
     }
 
-    fun createView(context: Context): View {
+    fun createView(context: Context): View? {
         return if (repository != null) {
             StageHostSelectorView(repository!!, context)
         } else {
-            View(context).apply {
-                layoutParams = FrameLayout.LayoutParams(0, 0)
-            }
+            null
         }
     }
 }

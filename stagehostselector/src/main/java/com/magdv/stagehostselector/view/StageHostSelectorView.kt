@@ -42,7 +42,7 @@ internal class StageHostSelectorView @JvmOverloads constructor(
         }
     }
 
-    override fun onValueChanged(newCurrentHostUrl: String?) {
+    override fun onCurrentHostUrlChanged(newCurrentHostUrl: String?) {
         text = newCurrentHostUrl ?: repository.getDefaultHostUrl()
     }
 }

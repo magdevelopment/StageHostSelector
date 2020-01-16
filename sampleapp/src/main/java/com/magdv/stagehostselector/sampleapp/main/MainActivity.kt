@@ -1,4 +1,4 @@
-package com.magdv.stagehostselector.sampleapp
+package com.magdv.stagehostselector.sampleapp.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.magdv.stagehostselector.StageHostSelector
+import com.magdv.stagehostselector.sampleapp.R
 import com.magdv.stagehostselector.sampleapp.network.HttpLog
 import com.magdv.stagehostselector.sampleapp.network.LoggingInterceptor
 import com.magdv.stagehostselector.sampleapp.network.NetworkFactory
@@ -41,23 +42,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        initStageHostSelector()
         initList()
         initStageHostSelectorView()
         initFab()
-    }
-
-    private fun initStageHostSelector() {
-        StageHostSelector.init(
-            this,
-            BuildConfig.API_ENDPOINT,
-            setOf(
-                "http://example.com/alternative/",
-                "http://172.21.19.123:3500/",
-                "http://example.com/alternative/first",
-                "http://example.com:8080/alternative/first"
-            )
-        )
     }
 
     private fun initList() {
@@ -82,7 +69,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initStageHostSelectorView() {
-        appBarLayout.addView(StageHostSelector.createView(this))
+        val view = StageHostSelector.createView(this)
+        if (view != null) appBarLayout.addView(view)
     }
 
     private fun initFab() {

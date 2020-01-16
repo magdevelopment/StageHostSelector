@@ -7,7 +7,7 @@ class ObservableCurrentHostUrl(listener: CurrentHostUrlChangeListener) {
     var currentHostUrl: String? by Delegates.observable<String?>(
         initialValue = null,
         onChange = { _, _, new ->
-            listener.onValueChanged(new)
+            listener.onCurrentHostUrlChanged(new)
         }
     )
 }
