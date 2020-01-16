@@ -54,7 +54,7 @@ internal class StageHostSelectorRepository private constructor(
 
     companion object {
 
-        @Volatile private var instance: StageHostSelectorRepository? = null
+        private var instance: StageHostSelectorRepository? = null
 
         fun getInstance(): StageHostSelectorRepository? {
             return instance
