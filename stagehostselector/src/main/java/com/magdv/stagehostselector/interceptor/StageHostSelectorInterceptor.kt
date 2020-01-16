@@ -5,21 +5,20 @@ import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class StageHostSelectorInterceptor : Interceptor {
+class StageHostSelectorInterceptor(
+    private val repository: StageHostSelectorRepository
+) : Interceptor {
 
     private var cachedHostUrl: String? = null
     private var cachedHostHttpUrl: HttpUrl? = null
-    private val repository = StageHostSelectorRepository.getInstance()
     private val defaultHostUrlSegments: List<String> by lazy {
-        repository?.getDefaultHostUrl()?.let { HttpUrl.parse(it) }
+        repository.getDefaultHostUrl()?.let { HttpUrl.parse(it) }
             ?.pathSegments()
             ?.filter { it.isNotEmpty() }
         ?: listOf()
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        if (repository == null) return chain.proceed(chain.request())
-
         val hostUrl = repository.getCurrentHostUrl()
                       ?: return chain.proceed(chain.request())
 

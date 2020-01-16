@@ -1,38 +1,39 @@
-/*
- * Copyright © 2019 MAG Development, LLC. All rights reserved.
- * Project: MAG.Express
- * Date: 22.07.2019
- * Time: 21:58
- * Author: Dmitriy Orteney <d.orteney at magdv.com>
- */
-
 package com.magdv.stagehostselector
 
 import android.content.Context
+import android.preference.PreferenceManager
 import android.view.View
+import android.widget.FrameLayout
+import com.magdv.stagehostselector.StageHostSelector.repository
 import com.magdv.stagehostselector.interceptor.StageHostSelectorInterceptor
 import com.magdv.stagehostselector.repository.StageHostSelectorRepository
+import com.magdv.stagehostselector.repository.StageHostSelectorRepositoryImpl
 import com.magdv.stagehostselector.view.StageHostSelectorView
 import okhttp3.OkHttpClient
 
 object StageHostSelector {
 
+    var repository: StageHostSelectorRepository? = null
+
     fun init(context: Context, defaultHostUrl: String? = null, suggestedUrls: Set<String>? = null) {
-        val repository = StageHostSelectorRepository.newInstance(context)
-        repository.setDefaultHostUrl(defaultHostUrl)
-        if (suggestedUrls != null) {
-            repository.addDefaultSuggestionUrls(suggestedUrls)
-        }
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        repository = StageHostSelectorRepositoryImpl.newInstance(preferences, defaultHostUrl, suggestedUrls)
     }
 
     fun createView(context: Context): View {
-        return StageHostSelectorView(context)
+        return if (repository != null) {
+            StageHostSelectorView(repository!!, context)
+        } else {
+            View(context).apply {
+                layoutParams = FrameLayout.LayoutParams(0, 0)
+            }
+        }
     }
 }
 
 fun OkHttpClient.Builder.addStageHostSelectorInterceptor(): OkHttpClient.Builder {
-    return if (StageHostSelectorRepository.getInstance() != null) {
-        this.addInterceptor(StageHostSelectorInterceptor())
+    return if (repository != null) {
+        this.addInterceptor(StageHostSelectorInterceptor(repository!!))
     } else {
         this
     }

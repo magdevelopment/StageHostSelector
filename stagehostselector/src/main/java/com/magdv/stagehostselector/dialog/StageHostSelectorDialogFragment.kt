@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -14,6 +13,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.widget.TextViewCompat
+import androidx.fragment.app.DialogFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.magdv.stagehostselector.R
@@ -25,9 +25,6 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
     private var suggestionHostUrls: MutableSet<String> = mutableSetOf()
     private var hostUrls: List<String> = emptyList()
     private var currentHostUrl: String? = null
-    private val repository: StageHostSelectorRepository? by lazy {
-        StageHostSelectorRepository.getInstance()
-    }
 
     override fun getTheme(): Int {
         return R.style.SHS_BottomSheetDialogTheme
@@ -157,5 +154,15 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
 
         Toast.makeText(requireContext(), R.string.shs_copied_to_clipboard, Toast.LENGTH_SHORT)
             .show()
+    }
+
+    companion object {
+
+        private var repository: StageHostSelectorRepository? = null
+
+        fun newInstance(repository: StageHostSelectorRepository): DialogFragment {
+            this.repository = repository
+            return StageHostSelectorDialogFragment()
+        }
     }
 }
