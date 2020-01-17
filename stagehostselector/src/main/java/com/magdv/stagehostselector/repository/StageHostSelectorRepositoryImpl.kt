@@ -49,11 +49,8 @@ internal class StageHostSelectorRepositoryImpl private constructor(
 
     companion object {
 
-        private var instance: StageHostSelectorRepositoryImpl? = null
-
         fun newInstance(preferences: SharedPreferences, defaultHostUrl: String?, suggestionHostUrls: Set<String>?): StageHostSelectorRepositoryImpl {
-            instance = StageHostSelectorRepositoryImpl(preferences, defaultHostUrl, suggestionHostUrls ?: emptySet())
-            return instance!!
+            return StageHostSelectorRepositoryImpl(preferences, defaultHostUrl, suggestionHostUrls ?: emptySet())
         }
     }
 

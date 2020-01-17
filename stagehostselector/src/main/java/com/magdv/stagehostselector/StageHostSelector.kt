@@ -3,7 +3,6 @@ package com.magdv.stagehostselector
 import android.content.Context
 import android.preference.PreferenceManager
 import android.view.View
-import android.widget.FrameLayout
 import com.magdv.stagehostselector.StageHostSelector.repository
 import com.magdv.stagehostselector.interceptor.StageHostSelectorInterceptor
 import com.magdv.stagehostselector.repository.StageHostSelectorRepository
@@ -21,11 +20,7 @@ object StageHostSelector {
     }
 
     fun createView(context: Context): View? {
-        return if (repository != null) {
-            StageHostSelectorView(repository!!, context)
-        } else {
-            null
-        }
+        return repository?.let { StageHostSelectorView(repository!!, context) }
     }
 }
 

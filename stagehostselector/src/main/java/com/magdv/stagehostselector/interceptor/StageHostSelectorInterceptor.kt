@@ -5,7 +5,7 @@ import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class StageHostSelectorInterceptor(
+internal class StageHostSelectorInterceptor(
     private val repository: StageHostSelectorRepository
 ) : Interceptor {
 
