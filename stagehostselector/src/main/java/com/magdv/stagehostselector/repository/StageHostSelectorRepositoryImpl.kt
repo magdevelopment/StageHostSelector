@@ -3,13 +3,14 @@ package com.magdv.stagehostselector.repository
 import android.content.SharedPreferences
 import com.magdv.stagehostselector.Constants
 import com.magdv.stagehostselector.common.CurrentHostUrlChangeListener
-import com.magdv.stagehostselector.common.ObservableCurrentHostUrl
 
 internal class StageHostSelectorRepositoryImpl private constructor(
-    private val preferences: SharedPreferences
+    private val preferences: SharedPreferences,
+    private var defaultHostUrl: String?,
+    private var suggestionHostUrls: Set<String>
 ) : StageHostSelectorRepository {
 
-    private var observable: ObservableCurrentHostUrl? = null
+    private var listener: CurrentHostUrlChangeListener? = null
 
     override fun getCurrentHostUrl(): String? {
         return preferences
@@ -17,7 +18,7 @@ internal class StageHostSelectorRepositoryImpl private constructor(
     }
 
     override fun setCurrentHostUrl(currentHostUrl: String?) {
-        observable?.currentHostUrl = currentHostUrl
+        listener?.onCurrentHostUrlChanged(currentHostUrl)
         preferences.edit()
             .putString(Constants.HOST_URL_STORAGE_KEY, currentHostUrl)
             .apply()
@@ -26,7 +27,7 @@ internal class StageHostSelectorRepositoryImpl private constructor(
     override fun getSuggestionHostUrls(): Set<String> {
         return preferences
                    .getStringSet(Constants.HOST_URL_SUGGESTIONS_STORAGE_KEY, null)
-               ?: urls.also {
+               ?: suggestionHostUrls.also {
                    setSuggestionHostUrls(it)
                }
     }
@@ -38,33 +39,21 @@ internal class StageHostSelectorRepositoryImpl private constructor(
     }
 
     override fun getDefaultHostUrl(): String? {
-        return url
+        return defaultHostUrl
     }
 
     override fun subscribeCurrentHostUrl(listener: CurrentHostUrlChangeListener) {
-        observable = ObservableCurrentHostUrl(listener)
-        observable?.currentHostUrl = getCurrentHostUrl() ?: getDefaultHostUrl()
+        this.listener = listener
+        listener.onCurrentHostUrlChanged(getCurrentHostUrl() ?: getDefaultHostUrl())
     }
 
     companion object {
 
         private var instance: StageHostSelectorRepositoryImpl? = null
-        private var urls: Set<String> = emptySet()
-        private var url: String? = null
 
         fun newInstance(preferences: SharedPreferences, defaultHostUrl: String?, suggestionHostUrls: Set<String>?): StageHostSelectorRepositoryImpl {
-            instance = StageHostSelectorRepositoryImpl(preferences)
-            addDefaultSuggestionUrls(suggestionHostUrls)
-            setDefaultHostUrl(defaultHostUrl)
+            instance = StageHostSelectorRepositoryImpl(preferences, defaultHostUrl, suggestionHostUrls ?: emptySet())
             return instance!!
-        }
-
-        private fun addDefaultSuggestionUrls(suggestedUrls: Set<String>?) {
-            this.urls = suggestedUrls ?: emptySet()
-        }
-
-        private fun setDefaultHostUrl(hostUrl: String?) {
-            this.url = hostUrl
         }
     }
 
