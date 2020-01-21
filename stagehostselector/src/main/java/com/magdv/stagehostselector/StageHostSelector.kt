@@ -16,7 +16,7 @@ object StageHostSelector {
 
     fun init(context: Context, defaultHostUrl: String? = null, suggestedUrls: Set<String>? = null) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        repository = StageHostSelectorRepositoryImpl.newInstance(preferences, defaultHostUrl, suggestedUrls)
+        repository = StageHostSelectorRepositoryImpl(preferences, defaultHostUrl, suggestedUrls ?: emptySet())
     }
 
     fun createView(context: Context): View? {
