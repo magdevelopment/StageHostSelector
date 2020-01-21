@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import com.magdv.stagehostselector.Constants
 import com.magdv.stagehostselector.common.CurrentHostUrlChangeListener
 
-internal class StageHostSelectorRepositoryImpl constructor(
+internal class StageHostSelectorRepositoryImpl(
     private val preferences: SharedPreferences,
     private val defaultHostUrl: String?,
     private val suggestionHostUrls: Set<String>
