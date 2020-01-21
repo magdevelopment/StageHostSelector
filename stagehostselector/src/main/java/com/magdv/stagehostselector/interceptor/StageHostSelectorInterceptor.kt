@@ -1,30 +1,26 @@
 package com.magdv.stagehostselector.interceptor
 
-import android.content.Context
-import android.preference.PreferenceManager
-import com.magdv.stagehostselector.Constants
+import com.magdv.stagehostselector.repository.StageHostSelectorRepository
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class StageHostSelectorInterceptor(
-    context: Context,
-    private val defaultHostUrl: String? = null
+internal class StageHostSelectorInterceptor(
+    private val repository: StageHostSelectorRepository
 ) : Interceptor {
 
-    private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     private var cachedHostUrl: String? = null
     private var cachedHostHttpUrl: HttpUrl? = null
     private val defaultHostUrlSegments: List<String> by lazy {
-        defaultHostUrl?.let { HttpUrl.parse(it) }
+        repository.getDefaultHostUrl()?.let { HttpUrl.parse(it) }
             ?.pathSegments()
             ?.filter { it.isNotEmpty() }
-            ?: listOf()
+        ?: listOf()
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val hostUrl = sharedPreferences.getString(Constants.HOST_URL_STORAGE_KEY, null)
-            ?: return chain.proceed(chain.request())
+        val hostUrl = repository.getCurrentHostUrl()
+                      ?: return chain.proceed(chain.request())
 
         if (cachedHostUrl != hostUrl) {
             cachedHostUrl = hostUrl
@@ -59,11 +55,11 @@ class StageHostSelectorInterceptor(
     ): Boolean {
         initialPathSegments.forEachIndexed { index, segment ->
             if (requestPathSegments[index] != segment) {
-                return false;
+                return false
             }
         }
 
-        return true;
+        return true
     }
 
     private fun HttpUrl.addPathSegments(pathSegments: List<String>): HttpUrl {

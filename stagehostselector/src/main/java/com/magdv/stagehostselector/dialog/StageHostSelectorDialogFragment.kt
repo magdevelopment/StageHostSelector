@@ -3,9 +3,7 @@ package com.magdv.stagehostselector.dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -15,17 +13,14 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.widget.TextViewCompat
+import androidx.fragment.app.DialogFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
-import com.magdv.stagehostselector.Constants
 import com.magdv.stagehostselector.R
+import com.magdv.stagehostselector.repository.StageHostSelectorRepository
 import kotlinx.android.synthetic.main.shs_dialog_stage_host_selector.*
 
 internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
-
-    private val preferences: SharedPreferences by lazy {
-        PreferenceManager.getDefaultSharedPreferences(context)
-    }
 
     private var suggestionHostUrls: MutableSet<String> = mutableSetOf()
     private var hostUrls: List<String> = emptyList()
@@ -83,14 +78,6 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun onHostUrlSelected(url: String?) {
-        currentHostUrl = url
-
-        preferences.edit()
-            .putString(Constants.HOST_URL_STORAGE_KEY, url)
-            .apply()
-    }
-
     private fun validateUrl(url: String): Boolean {
         return when {
             url.isBlank() -> {
@@ -102,19 +89,31 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun saveSuggestions() {
-        preferences.edit()
-            .putStringSet(Constants.HOST_URL_SUGGESTIONS_STORAGE_KEY, suggestionHostUrls)
-            .apply()
+    private fun loadSuggestions() {
+        suggestionHostUrls = (repository?.getSuggestionHostUrls() ?: emptySet()).toMutableSet()
+        currentHostUrl = repository?.getCurrentHostUrl()
     }
 
-    private fun loadSuggestions() {
-        suggestionHostUrls = preferences
-            .getStringSet(Constants.HOST_URL_SUGGESTIONS_STORAGE_KEY, null)
-            ?.toMutableSet() ?: mutableSetOf()
+    private fun onRemoveHostUrl(id: Int) {
+        val urlToRemove = hostUrls[id]
 
-        currentHostUrl = preferences
-            .getString(Constants.HOST_URL_STORAGE_KEY, null)
+        if (urlToRemove == currentHostUrl) {
+            onHostUrlSelected(null)
+        }
+
+        suggestionHostUrls.remove(urlToRemove)
+        saveSuggestions()
+        showSuggestions()
+    }
+
+    private fun onHostUrlSelected(url: String?) {
+        currentHostUrl = url
+
+        repository?.setCurrentHostUrl(url)
+    }
+
+    private fun saveSuggestions() {
+        repository?.setSuggestionHostUrls(suggestionHostUrls)
     }
 
     private fun showSuggestions() {
@@ -148,18 +147,6 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
             .also { chipGroup.addView(it) }
     }
 
-    private fun onRemoveHostUrl(id: Int) {
-        val urlToRemove = hostUrls[id]
-
-        if (urlToRemove == currentHostUrl) {
-            onHostUrlSelected(null)
-        }
-
-        suggestionHostUrls.remove(urlToRemove)
-        saveSuggestions()
-        showSuggestions()
-    }
-
     private fun onLongClick(url: String) {
         val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("Url", url)
@@ -167,5 +154,15 @@ internal class StageHostSelectorDialogFragment : BottomSheetDialogFragment() {
 
         Toast.makeText(requireContext(), R.string.shs_copied_to_clipboard, Toast.LENGTH_SHORT)
             .show()
+    }
+
+    companion object {
+
+        private var repository: StageHostSelectorRepository? = null
+
+        fun newInstance(repository: StageHostSelectorRepository): DialogFragment {
+            this.repository = repository
+            return StageHostSelectorDialogFragment()
+        }
     }
 }

@@ -1,10 +1,11 @@
-package com.magdv.stagehostselector.sampleapp
+package com.magdv.stagehostselector.sampleapp.main
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.magdv.stagehostselector.sampleapp.R
 import com.magdv.stagehostselector.sampleapp.network.HttpLog
 import kotlinx.android.synthetic.main.item_http_log.view.*
 import java.text.SimpleDateFormat

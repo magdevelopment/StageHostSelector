@@ -1,4 +1,4 @@
-package com.magdv.stagehostselector.sampleapp
+package com.magdv.stagehostselector.sampleapp.main
 
 import androidx.recyclerview.widget.DiffUtil
 import com.magdv.stagehostselector.sampleapp.network.HttpLog

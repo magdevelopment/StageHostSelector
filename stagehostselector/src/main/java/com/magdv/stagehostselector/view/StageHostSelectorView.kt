@@ -1,9 +1,7 @@
 package com.magdv.stagehostselector.view
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.graphics.Color
-import android.preference.PreferenceManager
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.ViewGroup
@@ -12,35 +10,24 @@ import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.magdv.stagehostselector.Constants
+import com.magdv.stagehostselector.common.CurrentHostUrlChangeListener
 import com.magdv.stagehostselector.dialog.StageHostSelectorDialogFragment
+import com.magdv.stagehostselector.repository.StageHostSelectorRepository
 
-class StageHostSelectorView @JvmOverloads constructor(
+internal class StageHostSelectorView @JvmOverloads constructor(
+    private val repository: StageHostSelectorRepository,
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AppCompatTextView(context, attrs, defStyleAttr) {
+) : AppCompatTextView(context, attrs, defStyleAttr),
+    CurrentHostUrlChangeListener {
 
-    var defaultHostUrl: String? = null
-        set(value) {
-            field = value
-            updateText()
-        }
 
     private val fragmentManager: FragmentManager?
         get() = (context as? FragmentActivity)?.supportFragmentManager
 
-    private val sharedPreferences: SharedPreferences by lazy {
-        PreferenceManager.getDefaultSharedPreferences(context)
-    }
-
-    private val preferencesChangeListener =
-        SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            if (key == Constants.HOST_URL_STORAGE_KEY) {
-                updateText()
-            }
-        }
-
     init {
+        repository.subscribeCurrentHostUrl(this)
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
         setTextColor(Color.WHITE)
         setBackgroundColor(ColorUtils.setAlphaComponent(Color.BLACK, 138))
@@ -50,22 +37,12 @@ class StageHostSelectorView @JvmOverloads constructor(
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         setOnClickListener {
-            val dialog = StageHostSelectorDialogFragment()
+            val dialog = StageHostSelectorDialogFragment.newInstance(repository)
             dialog.show(fragmentManager, Constants.STAGE_HOST_SELECTOR_DIALOG_TAG)
         }
     }
 
-    private fun updateText() {
-        text = sharedPreferences.getString(Constants.HOST_URL_STORAGE_KEY, defaultHostUrl)
-    }
-
-    override fun onAttachedToWindow() {
-        sharedPreferences.registerOnSharedPreferenceChangeListener(preferencesChangeListener)
-        super.onAttachedToWindow()
-    }
-
-    override fun onDetachedFromWindow() {
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(preferencesChangeListener)
-        super.onDetachedFromWindow()
+    override fun onCurrentHostUrlChanged(newCurrentHostUrl: String?) {
+        text = newCurrentHostUrl ?: repository.getDefaultHostUrl()
     }
 }

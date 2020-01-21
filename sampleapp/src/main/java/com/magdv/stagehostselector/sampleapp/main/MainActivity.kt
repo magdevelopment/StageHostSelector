@@ -1,15 +1,16 @@
-package com.magdv.stagehostselector.sampleapp
+package com.magdv.stagehostselector.sampleapp.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.magdv.stagehostselector.StageHostSelector
+import com.magdv.stagehostselector.sampleapp.R
 import com.magdv.stagehostselector.sampleapp.network.HttpLog
 import com.magdv.stagehostselector.sampleapp.network.LoggingInterceptor
 import com.magdv.stagehostselector.sampleapp.network.NetworkFactory
 import com.magdv.stagehostselector.sampleapp.network.UserApi
-import com.magdv.stagehostselector.view.StageHostSelectorView
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.activity_main.*
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val userApi: UserApi by lazy {
-        val client = NetworkFactory.createHttpClient(this, loggingInterceptor)
+        val client = NetworkFactory.createHttpClient(loggingInterceptor)
         return@lazy NetworkFactory.createUserApi(client)
     }
 
@@ -68,9 +69,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initStageHostSelectorView() {
-        val view = StageHostSelectorView(this)
-        view.defaultHostUrl = BuildConfig.API_ENDPOINT
-        appBarLayout.addView(view)
+        val view = StageHostSelector.createView(this)
+        if (view != null) appBarLayout.addView(view)
     }
 
     private fun initFab() {
