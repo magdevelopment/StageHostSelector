@@ -11,22 +11,36 @@ dependencies {
 ```
 
 ## How to use
-1. Somewhere on login screen create, init and add view:
+1. Add in application onCreate:
 ```kotlin
 if (BuildConfig.USES_DEV_FEATURES) {
-    val view = StageHostSelectorView(this)  
-    view.defaultHostUrl = BuildConfig.API_ENDPOINT
-    rootLayout.addView(view)
+    StageHostSelector.init(
+        context = this,
+        defaultHostUrl = BuildConfig.API_ENDPOINT,
+        suggestedUrls = setOf(
+            "http://example.com/alternative/",
+            "http://172.21.19.123:3500/",
+            "http://example.com/alternative/first",
+            "http://example.com:8080/alternative/first"
+        )
+    )
 }
 ```
 
-2. When creating OkHttp's client add interceptor:
+2. Somewhere on login screen create and add view:
 ```kotlin
+val view = StageHostSelector.createView(this)
+// if you are not initialized StageHostSelector, function StageHostSelector.createView(this) return null
+if (view != null) appBarLayout.addView(view)
+```
+
+3. When creating OkHttp's client add interceptor:
+```kotlin
+import com.magdv.stagehostselector.addStageHostSelectorInterceptor
+
 val clientBuilder = OkHttpClient.Builder()
 ...
-if (BuildConfig.USES_DEV_FEATURES) {
-    clientBuilder.addInterceptor(StageHostSelectorInterceptor(appContext))
-}
+clientBuilder.addStageHostSelectorInterceptor()
 ...
 clientBuilder.build()
 ```
